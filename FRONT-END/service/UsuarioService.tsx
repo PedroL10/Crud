@@ -1,22 +1,30 @@
 import axios from 'axios';
+import { BaseService } from './BaseService';
 
-export class UsuarioService {
-    private apiUrl = 'http://localhost:8080/usuario';
-
-    listarTodos() {
-        return axios.get(this.apiUrl);
+export class UsuarioService extends BaseService {
+    constructor() {
+        super('/usuario');
     }
+}
 
-    inserir(usuario: Projeto.Usuario) {
-        const { id, ...usuarioSemId } = usuario;
-        return axios.post(this.apiUrl, usuarioSemId);
+export class UsuarioLoginService extends BaseService {
+    constructor() {
+        super('/usuario/login');
     }
-
-    atualizar(id: number, usuario: Projeto.Usuario) {
-        return axios.put(`${this.apiUrl}/${id}`, usuario);
+}
+export class UsuarioLogoutService extends BaseService {
+    constructor() {
+        super('/usuario/logout');
     }
+}
+export class UsuarioRecuperarSenhaService extends BaseService {
+    constructor() {
+        super('/usuario/recuperar-senha');
+    }
+}
 
-    deletar(id: number) {
-        return axios.delete(`${this.apiUrl}/${id}`);
+export class UsuarioAlterarSenhaService extends BaseService {
+    constructor() {
+        super('/usuario/alterar-senha');
     }
 }

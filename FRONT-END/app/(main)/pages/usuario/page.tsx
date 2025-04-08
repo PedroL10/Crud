@@ -1,12 +1,12 @@
 'use client';
 import { UsuarioService } from '@/service/UsuarioService';
+import { Projeto } from '@/types';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { FileUpload } from 'primereact/fileupload';
 import { InputText } from 'primereact/inputtext';
-
 import { Toast } from 'primereact/toast';
 import { Toolbar } from 'primereact/toolbar';
 import { classNames } from 'primereact/utils';
@@ -34,19 +34,15 @@ const Crud = () => {
     const usuarioService = new UsuarioService();
 
     useEffect(() => {
-        // Simulating fetching data from an API
-        // In a real application, you would replace this with an API call to fetch the users
         usuarioService
             .listarTodos()
             .then((response) => {
-                console.log('Response:', response.data); // Log the response data
-                setUsuarios(response.data); // Set the users state with the response data
+                console.log('Response:', response.data);
+                setUsuarios(response.data);
             })
             .catch((error) => {
-                console.error('Error fetching users:', error); // Log any errors
+                console.error('Error fetching users:', error);
             });
-
-        setUsuarios([{ id: 1, nome: 'Karim Benzema', login: 'benzema9', senha: 'gol123', email: 'benzema@realmadrid.com' }]);
     }, []);
 
     const openNew = () => {
@@ -72,13 +68,11 @@ const Crud = () => {
         setSubmitted(true);
 
         if (!usuario.id) {
-            // Criar novo usuário
+            const { id, ...usuarioSemId } = usuario; // Remove o campo 'id'
             usuarioService
-                .inserir(usuario)
+                .inserir(usuarioSemId) // Envia o objeto sem o 'id'
                 .then((response) => {
-                    setUsuarios(
-                        (prevUsuarios) => (prevUsuarios || []).map((u) => (u.id === usuario.id ? response.data : u)) // Atualiza o usuário na lista
-                    );
+                    setUsuarios((prevUsuarios) => (prevUsuarios || []).concat(response.data));
                     setUsuarioDialog(false);
                     setUsuario(usuarioVazio);
                     toast.current?.show({
@@ -98,13 +92,10 @@ const Crud = () => {
                     });
                 });
         } else {
-            // Atualizar usuário existente
             usuarioService
                 .atualizar(usuario.id, usuario)
                 .then((response) => {
-                    setUsuarios(
-                        (prevUsuarios) => (prevUsuarios || []).map((u) => (u.id === usuario.id ? response.data : u)) // Atualiza o usuário na lista
-                    );
+                    setUsuarios((prevUsuarios) => (prevUsuarios || []).map((u) => (u.id === usuario.id ? response.data : u)));
                     setUsuarioDialog(false);
                     setUsuario(usuarioVazio);
                     toast.current?.show({
@@ -161,6 +152,7 @@ const Crud = () => {
                 });
             });
     };
+
     const findIndexById = (id: number) => {
         let index = -1;
         for (let i = 0; i < (usuarios || []).length; i++) {
@@ -169,7 +161,6 @@ const Crud = () => {
                 break;
             }
         }
-
         return index;
     };
 
@@ -186,26 +177,37 @@ const Crud = () => {
     };
 
     const deleteSelectedUsuarios = () => {
-        let _usuarios = (usuarios || []).filter((val) => !(selectedUsuarios || []).includes(val));
-        setUsuarios(_usuarios);
-        setDeleteUsuariosDialog(false);
-        setSelectedUsuarios(null);
-        toast.current?.show({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Usuários Deletados',
-            life: 3000
-        });
+        if (selectedUsuarios) {
+            Promise.all(selectedUsuarios.map((usuario) => usuarioService.deletar(usuario.id!)))
+                .then(() => {
+                    let _usuarios = (usuarios || []).filter((val) => !selectedUsuarios.includes(val));
+                    setUsuarios(_usuarios);
+                    setDeleteUsuariosDialog(false);
+                    setSelectedUsuarios(null);
+                    toast.current?.show({
+                        severity: 'success',
+                        summary: 'Successful',
+                        detail: 'Usuários Deletados',
+                        life: 3000
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error deleting selected users:', error);
+                    toast.current?.show({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Erro ao deletar usuários selecionados',
+                        life: 3000
+                    });
+                });
+        }
     };
 
-    const onInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        nome: keyof Projeto.Usuario // Restrict to valid keys of Projeto.Usuario
-    ) => {
+    const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, nome: keyof Projeto.Usuario) => {
         const val = e.target.value || '';
-        setUsuario((prevUsuario) => ({
+        setUsuario((prevUsuario: any) => ({
             ...prevUsuario,
-            [nome]: val // TypeScript now knows 'nome' is a valid key
+            [nome]: val
         }));
     };
 
@@ -213,7 +215,7 @@ const Crud = () => {
         return (
             <React.Fragment>
                 <div className="my-2">
-                    <Button label="Novo" icon="pi pi-plus" severity="success" className=" mr-2" onClick={openNew} />
+                    <Button label="Novo" icon="pi pi-plus" severity="success" className="mr-2" onClick={openNew} />
                     <Button label="Deletar" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedUsuarios || !selectedUsuarios.length} />
                 </div>
             </React.Fragment>
@@ -245,12 +247,14 @@ const Crud = () => {
             <Button label="Salvar" icon="pi pi-check" text onClick={saveUsuario} />
         </>
     );
+
     const deleteUsuarioDialogFooter = (
         <>
             <Button label="Não" icon="pi pi-times" text onClick={hideDeleteUsuarioDialog} />
             <Button label="Sim" icon="pi pi-check" text onClick={deleteUsuario} />
         </>
     );
+
     const deleteUsuariosDialogFooter = (
         <>
             <Button label="Não" icon="pi pi-times" text onClick={hideDeleteUsuariosDialog} />
