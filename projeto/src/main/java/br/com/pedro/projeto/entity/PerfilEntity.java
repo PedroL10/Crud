@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import java.util.Objects;
 
 @Entity
-@Table(name = "NPL_PERFIL")
+@Table(name = "TB_PERFIL")
 public class PerfilEntity {
 
     @Id

@@ -17,37 +17,6 @@ const AppMenu = () => {
             to: '/pages',
             items: [
                 {
-                    label: 'Landing',
-                    icon: 'pi pi-fw pi-globe',
-                    to: '/landing'
-                },
-                {
-                    label: 'Auth',
-                    icon: 'pi pi-fw pi-user',
-                    items: [
-                        {
-                            label: 'Login',
-                            icon: 'pi pi-fw pi-sign-in',
-                            to: '/auth/login'
-                        },
-                        {
-                            label: 'Error',
-                            icon: 'pi pi-fw pi-times-circle',
-                            to: '/auth/error'
-                        },
-                        {
-                            label: 'Access Denied',
-                            icon: 'pi pi-fw pi-lock',
-                            to: '/auth/access'
-                        }
-                    ]
-                },
-                {
-                    label: 'Crud',
-                    icon: 'pi pi-fw pi-pencil',
-                    to: '/pages/crud'
-                },
-                {
                     label: 'Usuario',
                     icon: 'pi pi-fw pi-user',
                     to: '/pages/usuario'
@@ -63,19 +32,14 @@ const AppMenu = () => {
                     to: '/pages/perfil'
                 },
                 {
-                    label: 'Timeline',
-                    icon: 'pi pi-fw pi-calendar',
-                    to: '/pages/timeline'
+                    label: 'Perfil-Usuario',
+                    icon: 'pi pi-fw pi-users',
+                    to: '/pages/perfil-usuario'
                 },
                 {
-                    label: 'Not Found',
-                    icon: 'pi pi-fw pi-exclamation-circle',
-                    to: '/pages/notfound'
-                },
-                {
-                    label: 'Empty',
-                    icon: 'pi pi-fw pi-circle-off',
-                    to: '/pages/empty'
+                    label: 'Permissao',
+                    icon: 'pi pi-fw pi-users',
+                    to: '/pages/permissao-perfil-recurso'
                 }
             ]
         }

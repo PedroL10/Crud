@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import java.util.Objects;
 
 @Entity
-@Table(name = "NPL_RECURSO")
+@Table(name = "TB_RECURSO")
 public class RecursoEntity {
 
     @Id
