@@ -24,7 +24,7 @@ public class UsuarioController {
     public UsuarioDTO listarPorId(@PathVariable  Long id){
         return usuarioService.listarPorId(id);
     }
-    @PostMapping    
+    @PostMapping
     public void inserir(@RequestBody UsuarioDTO usuarioDTO){
         usuarioService.inserir(usuarioDTO);
     }

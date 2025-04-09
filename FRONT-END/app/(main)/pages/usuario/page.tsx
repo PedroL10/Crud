@@ -266,6 +266,7 @@ const Crud = () => {
         <div className="grid crud-demo">
             <div className="col-12">
                 <div className="card">
+                    <h1>CADASTRO DE USUSARIO</h1>
                     <Toast ref={toast} />
                     <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
