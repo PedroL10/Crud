@@ -1,8 +1,7 @@
-import { Projeto } from '@/types';
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL_API
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL
 });
 
 export class LoginService {

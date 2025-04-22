@@ -1,5 +1,6 @@
 package br.com.pedro.projeto.entity;
 
+import br.com.pedro.projeto.entity.enums.TipoSituacaoUsuario;
 import jakarta.persistence.*;
 import org.springframework.beans.BeanUtils;
 
@@ -22,6 +23,8 @@ public class UsuarioEntity {
     @Column(nullable = false)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    private TipoSituacaoUsuario situacao;
 
     public UsuarioEntity(UsuarioDTO usuario) {
         BeanUtils.copyProperties(usuario, this);
@@ -67,6 +70,10 @@ public class UsuarioEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public TipoSituacaoUsuario getSituacao() {return situacao;}
+
+    public void setSituacao(TipoSituacaoUsuario situacao) {this.situacao = situacao; }
 
     @Override
     public boolean equals(Object o) {

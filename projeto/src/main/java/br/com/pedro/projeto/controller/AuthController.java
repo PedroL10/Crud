@@ -25,14 +25,14 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(authDto));
     }
 
-//    @PostMapping(value = "/novoUsuario")
-//    public void inserirNovoUsuario(@RequestBody UsuarioDTO novoUsuario){
-//        usuarioService.inserirNovoUsuario(novoUsuario);
-//    }
-//
-//    @GetMapping(value = "/verificarCadastro/{uuid}")
-//    public String verificarCadastro(@PathVariable("uuid") String uuid) {
-//        return usuarioService.verificarCadastro(uuid);
-//    }
+    @PostMapping(value = "/novoUsuario")
+    public void inserirNovoUsuario(@RequestBody UsuarioDTO novoUsuario){
+        usuarioService.inserirNovoUsuario(novoUsuario);
+    }
+
+    @GetMapping(value = "/verificarCadastro/{uuid}")
+    public String verificarCadastro(@PathVariable("uuid") String uuid) {
+        return usuarioService.verificarCadastro(uuid);
+    }
 
 }
